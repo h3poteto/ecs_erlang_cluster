@@ -1,0 +1,24 @@
+version: "3.0"
+services:
+  elixir:
+    image: h3poteto/phoenix:1.7.3
+    working_dir: /var/opt/app
+    environment:
+      MIX_ENV: dev
+      ECS_CONTAINER_METADATA_URI: http://ecsmock:4000
+      EC2_METADATA_URI: http://ec2mock:4000
+    volumes:
+      - .:/var/opt/app
+    links:
+      - ecs_mock:ecsmock
+
+  ecs_mock:
+    image: h3poteto/phoenix:1.7.3
+    working_dir: /var/opt/app
+    environment:
+      MIX_ENV: dev
+      PORT: 4000
+    volumes:
+      - ./ecs_mock:/var/opt/app
+    command: mix trot.server
+
