@@ -11,6 +11,7 @@ services:
       - .:/var/opt/app
     links:
       - ecs_mock:ecsmock
+      - ec2_mock:ec2mock
 
   ecs_mock:
     image: h3poteto/phoenix:1.7.3
@@ -20,5 +21,20 @@ services:
       PORT: 4000
     volumes:
       - ./ecs_mock:/var/opt/app
-    command: mix trot.server
+    entrypoint: sh -c
+    command: |
+      "mix deps.get && \
+      mix trot.server"
 
+  ec2_mock:
+    image: h3poteto/phoenix:1.7.3
+    working_dir: /var/opt/app
+    environment:
+      MIX_ENV: dev
+      PORT: 4000
+    volumes:
+      - ./ec2_mock:/var/opt/app
+    entrypoint: sh -c
+    command: |
+      "mix deps.get && \
+      mix trot.server"

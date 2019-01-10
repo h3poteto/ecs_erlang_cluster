@@ -1,4 +1,10 @@
 defmodule EcsErlangCluster.Oneself do
+  def get() do
+    {:ok, task_id} = task()
+    {:ok, private_ip} = ip()
+    "#{task_id}@#{private_ip}"
+  end
+
   def task() do
     get_ecs_metadata()
     |> get_task_id()
@@ -26,12 +32,12 @@ defmodule EcsErlangCluster.Oneself do
   end
 
   def ip() do
-    get_ec2_metadata()
-    |> get_instance_ip()
-  end
-
-  def get_ec2_metadata() do
     #  On production EC2, it is http://169.254.169.254/latest/meta-data/local-ipv4.
-    url = "#{System.get_env("EC2_METADATA_URI")}/local-ipv4"
+    url = "#{System.get_env("EC2_METADATA_URI")}/latest/meta-data/local-ipv4"
+    result = HTTPoison.get!(url)
+    case result do
+      %{status_code: 200, body: body} -> {:ok, body}
+      %{status_code: code} -> {:error, code}
+    end
   end
 end

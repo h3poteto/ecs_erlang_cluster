@@ -30,8 +30,9 @@ defmodule EcsErlangCluster do
     System.halt(0)
   end
 
-  def process({:oneself, opts, other}) do
-    EcsErlangCluster.Oneself.get()
+  def process({:oneself, _opts, _other}) do
+    mes = EcsErlangCluster.Oneself.get()
+    IO.puts mes
     System.halt(0)
   end
 
