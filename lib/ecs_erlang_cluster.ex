@@ -8,8 +8,8 @@ defmodule EcsErlangCluster do
   def parse_args(argv) do
     parse = OptionParser.parse(
       argv,
-      switches: [help: :boolean],
-      aliases: [h: :help]
+      switches: [help: :boolean, file: :string],
+      aliases: [h: :help, f: :file]
     )
 
     case parse do
@@ -18,6 +18,7 @@ defmodule EcsErlangCluster do
       { opts, message, _ }
         -> case message do
              ["oneself" | other] -> {:oneself, opts, other}
+             ["generate" | other] -> {:generate, opts, other}
              _ -> message
            end
     end
@@ -36,8 +37,23 @@ defmodule EcsErlangCluster do
     System.halt(0)
   end
 
+  def process({:generate, opts, _other}) do
+    file_name = opts
+    |> file_parse
+    EcsErlangCluster.Generate.run("scouty-service-stg", "scouty-service-stg", file_name)
+    System.halt(0)
+  end
+
   def process(message) do
     IO.puts "Unknown options: #{message}"
     System.halt(1)
+  end
+
+  defp file_parse(opts) do
+    case opts do
+      [file: file] -> file
+      [f: file] -> file
+      _ -> "sys.config"
+    end
   end
 end

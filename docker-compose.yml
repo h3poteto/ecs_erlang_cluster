@@ -7,6 +7,8 @@ services:
       MIX_ENV: dev
       ECS_CONTAINER_METADATA_URI: http://ecsmock:4000
       EC2_METADATA_URI: http://ec2mock:4000
+      AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+      AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
     volumes:
       - .:/var/opt/app
     links:

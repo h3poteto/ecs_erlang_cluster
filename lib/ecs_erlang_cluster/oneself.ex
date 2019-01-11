@@ -1,13 +1,18 @@
 defmodule EcsErlangCluster.Oneself do
   def get() do
-    {:ok, task_id} = task()
+    {:ok, task} = task_id()
     {:ok, private_ip} = ip()
-    "#{task_id}@#{private_ip}"
+    "#{task}@#{private_ip}"
   end
 
-  def task() do
+  def task_id() do
     get_ecs_metadata()
-    |> get_task_id()
+    |> parse_task_id()
+  end
+
+  def task_arn() do
+    get_ecs_metadata()
+    |> parse_task_arn()
   end
 
   def get_ecs_metadata() do
@@ -19,12 +24,16 @@ defmodule EcsErlangCluster.Oneself do
     end
   end
 
-  def get_task_id(%{"TaskARN" => arn}) do
+  def parse_task_id(%{"TaskARN" => arn}) do
     res = Regex.named_captures(~r/arn:aws:ecs:.+:task\/(?<id>.*?)$/, arn)
     case res do
       %{"id" => id} -> {:ok, id}
       _ -> {:error, nil}
     end
+  end
+
+  def parse_task_arn(%{"TaskARN" => arn}) do
+    arn
   end
 
   def get_task_id({:error, code}) do

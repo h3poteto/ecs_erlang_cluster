@@ -1,0 +1,6 @@
+[{kernel,
+  [
+    {sync_nodes_optional, [<%= Enum.map(name_and_ips, fn(n) -> "'#{n}'" end) |> Enum.join(", ") %>]},
+    {sync_nodes_timeout, 10000}
+  ]}
+].
