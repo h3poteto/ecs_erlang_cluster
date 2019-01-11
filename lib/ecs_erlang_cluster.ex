@@ -8,8 +8,8 @@ defmodule EcsErlangCluster do
   def parse_args(argv) do
     parse = OptionParser.parse(
       argv,
-      switches: [help: :boolean, version: :boolean, file: :string],
-      aliases: [h: :help, f: :file]
+      switches: [help: :boolean, version: :boolean, file: :string, cluster: :string, service: :string],
+      aliases: [h: :help, f: :file, c: :cluster, s: :service]
     )
 
     case parse do
@@ -49,9 +49,12 @@ defmodule EcsErlangCluster do
   end
 
   def process({:generate, opts, _other}) do
-    file_name = opts
+    map_opts = opts |> Enum.into(%{})
+    cluster = cluster_name_parse(map_opts)
+    service = service_name_parse(map_opts)
+    file_name = map_opts
     |> file_parse
-    EcsErlangCluster.Generate.run("scouty-service-stg", "scouty-service-stg", file_name)
+    EcsErlangCluster.Generate.run(cluster, service, file_name)
     System.halt(0)
   end
 
@@ -60,11 +63,29 @@ defmodule EcsErlangCluster do
     System.halt(1)
   end
 
-  defp file_parse(opts) do
-    case opts do
-      [file: file] -> file
-      [f: file] -> file
-      _ -> "sys.config"
-    end
+  defp file_parse(%{file: file}) do
+    file
+  end
+
+  defp file_parse(_) do
+    "sys.config"
+  end
+
+  defp cluster_name_parse(%{cluster: cluster}) do
+    cluster
+  end
+
+  defp cluster_name_parse(_) do
+    IO.puts "Error: cluster name is required."
+    System.halt(1)
+  end
+
+  defp service_name_parse(%{service: service}) do
+    service
+  end
+
+  defp service_name_parse(_) do
+    IO.puts "Error: service name is required"
+    System.halt(1)
   end
 end
