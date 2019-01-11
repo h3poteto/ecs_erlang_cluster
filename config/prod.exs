@@ -6,4 +6,4 @@ config :ex_aws,
 
 config :metadata_endpoint,
   ecs: {:system, "ECS_CONTAINER_METADATA_URI"},
-  ec2: {:system, "EC2_METADATA_URI"}
+  ec2: "http://169.254.169.254"
