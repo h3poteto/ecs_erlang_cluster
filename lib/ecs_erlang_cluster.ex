@@ -8,17 +8,21 @@ defmodule EcsErlangCluster do
   def parse_args(argv) do
     parse = OptionParser.parse(
       argv,
-      switches: [help: :boolean, file: :string],
+      switches: [help: :boolean, version: :boolean, file: :string],
       aliases: [h: :help, f: :file]
     )
 
     case parse do
       { [ help: true ], _, _ }
         -> :help
+      { [ version: true ], _, _ }
+        -> :version
       { opts, message, _ }
         -> case message do
              ["oneself" | other] -> {:oneself, opts, other}
              ["generate" | other] -> {:generate, opts, other}
+             ["help" | _other] -> :help
+             ["version" | _other] -> :version
              _ -> message
            end
     end
@@ -27,6 +31,13 @@ defmodule EcsErlangCluster do
   def process(:help) do
     IO.puts """
     Usage: ecs_erlang_cluster <command>
+    """
+    System.halt(0)
+  end
+
+  def process(:version) do
+    IO.puts """
+    0.1.0
     """
     System.halt(0)
   end
