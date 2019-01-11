@@ -16,7 +16,7 @@ defmodule EcsErlangCluster.Oneself do
   end
 
   def get_ecs_metadata() do
-    url = "#{Application.get_env(:metadata_endpoint, :ecs)}/task"
+    url = "#{EcsErlangCluster.Config.get_value(:metadata_endpoint, :ecs)}/task"
     result = HTTPoison.get!(url)
     case result do
       %{status_code: 200, body: body} -> Poison.decode!(body)
@@ -42,7 +42,7 @@ defmodule EcsErlangCluster.Oneself do
 
   def ip() do
     #  On production EC2, it is http://169.254.169.254/latest/meta-data/local-ipv4.
-    url = "#{Application.get_env(:metadata_endpoint, :ec2)}/latest/meta-data/local-ipv4"
+    url = "#{EcsErlangCluster.Config.get_value(:metadata_endpoint, :ec2)}/latest/meta-data/local-ipv4"
     result = HTTPoison.get!(url)
     case result do
       %{status_code: 200, body: body} -> {:ok, body}

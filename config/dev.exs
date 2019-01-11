@@ -6,5 +6,5 @@ config :ex_aws,
   region: "ap-northeast-1"
 
 config :metadata_endpoint,
-  ecs: System.get_env("ECS_CONTAINER_METADATA_URI"),
-  ec2: System.get_env("EC2_METADATA_URI")
+  ecs: {:system, "ECS_CONTAINER_METADATA_URI"},
+  ec2: {:system, "EC2_METADATA_URI"}
