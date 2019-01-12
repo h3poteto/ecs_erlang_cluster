@@ -16,3 +16,7 @@ remote: Counting objects: 100% (93/93), done.
 ...
 ```
 It will be installed in `~/.mix/escripts`, so please add this path in your `$PATH`.
+
+## License
+
+The package is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
