@@ -52,9 +52,12 @@ defmodule EcsErlangCluster do
     map_opts = opts |> Enum.into(%{})
     cluster = cluster_name_parse(map_opts)
     service = service_name_parse(map_opts)
+    IO.puts "Cluster name: #{cluster}"
+    IO.puts "Service name: #{service}"
     file_name = map_opts
     |> file_parse
     EcsErlangCluster.Generate.run(cluster, service, file_name)
+    IO.puts "Generated #{file_name}"
     System.halt(0)
   end
 

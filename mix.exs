@@ -8,7 +8,13 @@ defmodule EcsErlangCluster.MixProject do
       elixir: "~> 1.7",
       escript: [main_module: EcsErlangCluster],
       start_permanent: Mix.env() == :prod,
-      deps: deps()
+      deps: deps(),
+      description: "This is a command line tool to create the Erlang cluster on AWS ECS.",
+      package: [
+        maintainers: ["h3poteto"],
+        licenses: ["MIT"],
+        links: %{"GitHub" => "https://github.com/h3poteto/ecs_erlang_cluster"}
+      ]
     ]
   end
 

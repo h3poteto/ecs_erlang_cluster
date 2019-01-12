@@ -30,7 +30,6 @@ defmodule EcsErlangCluster.Generate do
 
   def sibling_tasks(cluster_name, service_name) do
     list_task_arns(cluster_name, service_name)
-    |> Enum.filter(fn(arn) -> EcsErlangCluster.Oneself.task_arn() != arn end)
     |> describe_tasks(cluster_name)
     |> Enum.map(fn(task) -> parser(task, cluster_name) end)
   end
