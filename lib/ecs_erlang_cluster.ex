@@ -8,7 +8,7 @@ defmodule EcsErlangCluster do
   def parse_args(argv) do
     parse = OptionParser.parse(
       argv,
-      switches: [help: :boolean, version: :boolean, file: :string, cluster: :string, service: :string],
+      switches: [help: :boolean, version: :boolean, file: :string, cluster: :string, service: :string, region: :string],
       aliases: [h: :help, f: :file, c: :cluster, s: :service]
     )
 
@@ -52,11 +52,12 @@ defmodule EcsErlangCluster do
     map_opts = opts |> Enum.into(%{})
     cluster = cluster_name_parse(map_opts)
     service = service_name_parse(map_opts)
+    region = region_parse(map_opts)
     IO.puts "Cluster name: #{cluster}"
     IO.puts "Service name: #{service}"
     file_name = map_opts
     |> file_parse
-    EcsErlangCluster.Generate.run(cluster, service, file_name)
+    EcsErlangCluster.Generate.run(cluster, service, file_name, region)
     IO.puts "Generated #{file_name}"
     System.halt(0)
   end
@@ -89,6 +90,15 @@ defmodule EcsErlangCluster do
 
   defp service_name_parse(_) do
     IO.puts "Error: service name is required"
+    System.halt(1)
+  end
+
+  defp region_parse(%{region: region}) do
+    region
+  end
+
+  defp region_parse(_) do
+    IO.puts "Error: region is required"
     System.halt(1)
   end
 end
