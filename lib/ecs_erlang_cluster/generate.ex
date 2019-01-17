@@ -5,8 +5,14 @@ defmodule EcsErlangCluster.Generate do
     name_and_ips = sibling_tasks(cluster_name, service_name, region)
     |> Enum.map(fn(%{"task_id" => id, "private_ip" => ip}) -> "#{id}@#{ip}" end)
     file_name
-    |> File.write(EEx.eval_file(
-          "lib/ecs_erlang_cluster/templates/sys.config.eex",
+    |> File.write(EEx.eval_string("""
+    [{kernel,
+      [
+        {sync_nodes_optional, [<%= Enum.map(name_and_ips, fn(n) -> "'" <> n <> "'" end) |> Enum.join(", ") %>]},
+        {sync_nodes_timeout, 10000}
+      ]}
+    ].
+    """,
         [
           name_and_ips: name_and_ips
         ]))
