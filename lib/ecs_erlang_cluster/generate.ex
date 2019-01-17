@@ -6,7 +6,7 @@ defmodule EcsErlangCluster.Generate do
     |> Enum.map(fn(%{"task_id" => id, "private_ip" => ip}) -> "#{id}@#{ip}" end)
     file_name
     |> File.write(EEx.eval_file(
-          "templates/sys.config.eex",
+          "lib/ecs_erlang_cluster/templates/sys.config.eex",
         [
           name_and_ips: name_and_ips
         ]))
