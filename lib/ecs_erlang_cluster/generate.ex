@@ -1,7 +1,7 @@
 defmodule EcsErlangCluster.Generate do
   import SweetXml
 
-  def run(cluster_name, service_name, file_name, region) do
+  def run(cluster_name, service_name, file_name, region, min_port, max_port) do
     name_and_ips = sibling_tasks(cluster_name, service_name, region)
     |> Enum.map(fn(%{"task_id" => id, "private_ip" => ip}) -> "#{id}@#{ip}" end)
     file_name
@@ -9,12 +9,16 @@ defmodule EcsErlangCluster.Generate do
     [{kernel,
       [
         {sync_nodes_optional, [<%= Enum.map(name_and_ips, fn(n) -> "'" <> n <> "'" end) |> Enum.join(", ") %>]},
-        {sync_nodes_timeout, 10000}
+        {sync_nodes_timeout, 10000},
+        {inet_dist_listen_min, <%= min_port %>},
+        {inet_dist_listen_max, <%= max_port %>}
       ]}
     ].
     """,
         [
-          name_and_ips: name_and_ips
+          name_and_ips: name_and_ips,
+          min_port: min_port,
+          max_port: max_port
         ]))
   end
 

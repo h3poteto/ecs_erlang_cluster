@@ -8,7 +8,7 @@ defmodule EcsErlangCluster do
   def parse_args(argv) do
     parse = OptionParser.parse(
       argv,
-      switches: [help: :boolean, version: :boolean, file: :string, cluster: :string, service: :string, region: :string],
+      switches: [help: :boolean, version: :boolean, file: :string, cluster: :string, service: :string, region: :string, minport: :integer, maxport: :integer],
       aliases: [h: :help, f: :file, c: :cluster, s: :service]
     )
 
@@ -53,11 +53,13 @@ defmodule EcsErlangCluster do
     cluster = cluster_name_parse(map_opts)
     service = service_name_parse(map_opts)
     region = region_parse(map_opts)
+    min_port = min_port_parse(map_opts)
+    max_port = max_port_parse(map_opts)
     IO.puts "Cluster name: #{cluster}"
     IO.puts "Service name: #{service}"
     file_name = map_opts
     |> file_parse
-    EcsErlangCluster.Generate.run(cluster, service, file_name, region)
+    EcsErlangCluster.Generate.run(cluster, service, file_name, region, min_port, max_port)
     IO.puts "Generated #{file_name}"
     System.halt(0)
   end
@@ -99,6 +101,24 @@ defmodule EcsErlangCluster do
 
   defp region_parse(_) do
     IO.puts "Error: region is required"
+    System.halt(1)
+  end
+
+  defp min_port_parse(%{minport: min_port}) do
+    min_port
+  end
+
+  defp min_port_parse(_) do
+    IO.puts "Error: min_port is required"
+    System.halt(1)
+  end
+
+  defp max_port_parse(%{maxport: max_port}) do
+    max_port
+  end
+
+  defp max_port_parse(_) do
+    IO.puts "Error: max_port is required"
     System.halt(1)
   end
 end
