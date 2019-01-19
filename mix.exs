@@ -35,6 +35,7 @@ defmodule EcsErlangCluster.MixProject do
       {:hackney, "~> 1.9"},
       {:sweet_xml, "~> 0.6"},
       {:ex_aws_ecs, github: "Upptec/ex_aws_ecs"},
+      {:credo, "~> 1.0.0", only: [:dev, :test], runtime: false},
       # {:dep_from_hexpm, "~> 0.3.0"},
       # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"},
     ]
