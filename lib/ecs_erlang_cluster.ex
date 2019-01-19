@@ -13,24 +13,38 @@ defmodule EcsErlangCluster do
     )
 
     case parse do
-      { [ help: true ], _, _ }
+      { opts, ["oneself" | other], _ }
+        -> {:oneself, opts, other}
+      { opts, ["generate" | other], _ }
+        -> {:generate, opts, other}
+      { _opts, ["help" | _other], _ }
         -> :help
-      { [ version: true ], _, _ }
+      { _opts, ["version" | _other], _ }
         -> :version
-      { opts, message, _ }
-        -> case message do
-             ["oneself" | other] -> {:oneself, opts, other}
-             ["generate" | other] -> {:generate, opts, other}
-             ["help" | _other] -> :help
-             ["version" | _other] -> :version
-             _ -> message
-           end
+      { [help: true], _, _ }
+        -> :help
+      { [version: true], _, _ }
+        -> :version
+      { _opts, message, _ }
+        -> message
     end
   end
 
   def process(:help) do
     IO.puts """
+    ECS Erlang Cluster
+
     Usage: ecs_erlang_cluster <command>
+
+    Commands:
+      oneself      Get own task ID and private IP address of EC2 instance
+      generate     Generate sys.config file
+      help         Show this help
+      version      Print the version number
+
+    Flags:
+      -h, --help      Show this help
+      -v, --version   Print the version number
     """
     System.halt(0)
   end
@@ -42,9 +56,39 @@ defmodule EcsErlangCluster do
     System.halt(0)
   end
 
+  def process({:oneself, [help: true], _other}) do
+    IO.puts """
+    Get own task ID and private IP address of EC2 instance.
+
+    Usage: ecs_erlang_cluster oneself [flags]
+
+    Flags:
+      -h, --help      Show this help
+    """
+    System.halt(0)
+  end
+
   def process({:oneself, _opts, _other}) do
     mes = EcsErlangCluster.Oneself.get()
     IO.puts mes
+    System.halt(0)
+  end
+
+  def process({:generate, [help: true], _other}) do
+    IO.puts """
+    Generate sys.config.
+
+    Usage: ecs_erlang_cluster generate [flags]
+
+    Flags:
+      -h, --help      Show this help
+      -f, --file      File name to output (default: sys.config)
+      -c, --cluster   ECS Cluster name
+      -s, --service   ECS Service name
+      --region        AWS region name
+      --minport       Min port number which is used to connect other ErlangVM
+      --maxport       Max port number which is used to connect other ErlangVM
+    """
     System.halt(0)
   end
 
