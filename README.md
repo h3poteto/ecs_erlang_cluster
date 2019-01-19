@@ -45,7 +45,7 @@ sys.config
 And you can run your elixir or erlang process.
 
 ```bash
-$ iex --name $ONESELF --erl "-config sys.config" -S mix
+$ iex --name $ONESELF --cookie hogehoge --erl "-config sys.config" -S mix
 ```
 
 ## Note
