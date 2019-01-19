@@ -2,7 +2,7 @@
 
 This is a command line tool to create the Erlang cluster on AWS ECS. When start a ECS task, it needs `sys.config` and own identifier and IP address for Erlang cluster. Other node's identifiers and IP addresses are written in `sys.config`.
 
-ECSErlangCluster command can get own identifier and IP address, and can generate `sys.config` which has sibling nodes identifier and IP address. So you only have to launch the application by passing the result of this command.
+`ecs_erlang_cluster` command can get own identifier and IP address, and can generate `sys.config` which has sibling nodes identifier and IP address. So you only have to launch the application by passing the result of this command.
 
 ## Installation
 
