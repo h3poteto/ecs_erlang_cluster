@@ -1,6 +1,7 @@
 # ECSErlangCluster
 
-[![GitHub release](https://img.shields.io/github/release/h3poteto/ecs_erlang_cluster.svg?style=flat-square)](https://github.com/h3poteto/ecs_erlang_cluster/releases)
+[![GitHub release](https://img.shields.io/github/release/h3poteto/ecs_erlang_cluster.svg)](https://github.com/h3poteto/ecs_erlang_cluster/releases)
+[![Reviewed by Hound](https://img.shields.io/badge/Reviewed_by-Hound-8E64B0.svg)](https://houndci.com)
 
 This is a command line tool to create the Erlang cluster on AWS ECS. When start a ECS task, it needs `sys.config` and own identifier and IP address for Erlang cluster. Other node's identifiers and IP addresses are written in `sys.config`.
 
